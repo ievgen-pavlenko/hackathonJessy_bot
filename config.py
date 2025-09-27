@@ -11,16 +11,8 @@ if os.path.exists('config.env'):
 class Config:
     """Bot configuration class"""
     
-    # Bot credentials - can come from environment or Docker secrets
+    # Bot credentials from environment variable
     BOT_TOKEN = os.getenv('BOT_TOKEN')
-    
-    # Try to read from Docker secret if BOT_TOKEN is not set
-    if not BOT_TOKEN:
-        try:
-            with open('/run/secrets/bot_token', 'r') as f:
-                BOT_TOKEN = f.read().strip()
-        except (FileNotFoundError, IOError):
-            pass
     
     # Bot information
     BOT_NAME = os.getenv('BOT_NAME', 'Telegram Bot')
@@ -51,7 +43,7 @@ class Config:
     JOKES_API_ENDPOINT = os.getenv('JOKES_API_ENDPOINT', '/api/getJoke')
     JOKES_API_HEADERS = {
         'Content-Type': 'application/json',
-        'User-Agent': f'{Config.BOT_NAME}/{Config.BOT_VERSION}'
+        'User-Agent': f'Telegram Bot/1.0.0'
     }
     
     # Add API key to headers if provided

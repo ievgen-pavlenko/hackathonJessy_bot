@@ -8,12 +8,12 @@
 
 ```bash
 # Створення секрету
-echo "YOUR_BOT_TOKEN_HERE" | docker secret create bot_token -
+# BOT_TOKEN передається через змінну середовища
 
 # Запуск контейнера
 docker run -d \
   --name telegram-bot \
-  --secret bot_token \
+  -e BOT_TOKEN="YOUR_BOT_TOKEN" \
   telegram-bot
 ```
 
@@ -21,12 +21,12 @@ docker run -d \
 
 ```bash
 # Створення секрету
-echo "YOUR_BOT_TOKEN_HERE" | docker secret create bot_token -
+# BOT_TOKEN передається через змінну середовища
 
 # Запуск з змінними середовища
 docker run -d \
   --name telegram-bot \
-  --secret bot_token \
+  -e BOT_TOKEN="YOUR_BOT_TOKEN" \
   -e BOT_NAME="My Awesome Bot" \
   -e BOT_DEVELOPER="Your Name" \
   -e LOG_LEVEL=DEBUG \
@@ -45,7 +45,7 @@ LOG_LEVEL=INFO
 EOF
 
 # Створення секрету
-echo "YOUR_BOT_TOKEN_HERE" | docker secret create bot_token -
+# BOT_TOKEN передається через змінну середовища
 
 # Запуск
 docker-compose up -d
@@ -59,7 +59,7 @@ docker-compose up -d
 # Запуск з логуванням в файл
 docker run -d \
   --name telegram-bot \
-  --secret bot_token \
+  -e BOT_TOKEN="YOUR_BOT_TOKEN" \
   -v $(pwd)/logs:/app/logs \
   -e LOG_LEVEL=INFO \
   telegram-bot
@@ -137,14 +137,12 @@ docker swarm init
 docker swarm join --token SWMTKN-1-xxx manager-ip:2377
 ```
 
-### 2. Створення секрету
+### 2. Налаштування змінних середовища
 
 ```bash
-# Створення секрету
-echo "YOUR_BOT_TOKEN_HERE" | docker secret create bot_token -
-
-# Перевірка
-docker secret ls
+# BOT_TOKEN передається через змінну середовища
+# Перевірка змінних
+echo $BOT_TOKEN
 ```
 
 ### 3. Запуск сервісу
@@ -153,7 +151,7 @@ docker secret ls
 # Створення сервісу
 docker service create \
   --name telegram-bot \
-  --secret bot_token \
+  -e BOT_TOKEN="YOUR_BOT_TOKEN" \
   --env BOT_NAME="Production Bot" \
   --env LOG_LEVEL=INFO \
   --replicas 1 \
@@ -187,7 +185,7 @@ docker service logs telegram-bot
 # З Fluentd
 docker run -d \
   --name telegram-bot \
-  --secret bot_token \
+  -e BOT_TOKEN="YOUR_BOT_TOKEN" \
   --log-driver=fluentd \
   --log-opt fluentd-address=localhost:24224 \
   telegram-bot
@@ -195,7 +193,7 @@ docker run -d \
 # З ELK Stack
 docker run -d \
   --name telegram-bot \
-  --secret bot_token \
+  -e BOT_TOKEN="YOUR_BOT_TOKEN" \
   --log-driver=json-file \
   --log-opt max-size=10m \
   --log-opt max-file=3 \

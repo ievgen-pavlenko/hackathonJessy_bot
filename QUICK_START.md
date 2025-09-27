@@ -25,13 +25,13 @@ python main.py
 
 ```bash
 # 1. Секрет
-echo "YOUR_BOT_TOKEN" | docker secret create bot_token -
+# BOT_TOKEN передається через змінну середовища
 
 # 2. Збірка
 docker build -t telegram-bot .
 
 # 3. Запуск
-docker run -d --name telegram-bot --secret bot_token telegram-bot
+docker run -d --name telegram-bot -e BOT_TOKEN="YOUR_BOT_TOKEN" telegram-bot
 ```
 
 ## 🔧 Швидкі команди
@@ -43,7 +43,7 @@ docker run -d --name telegram-bot --secret bot_token telegram-bot
 docker build -t telegram-bot .
 
 # Запуск
-docker run -d --name telegram-bot --secret bot_token telegram-bot
+docker run -d --name telegram-bot -e BOT_TOKEN="YOUR_BOT_TOKEN" telegram-bot
 
 # Логи
 docker logs -f telegram-bot

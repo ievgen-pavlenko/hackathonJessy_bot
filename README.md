@@ -26,9 +26,8 @@ cp config.env .env  # Налаштуйте токен
 python main.py
 
 # Docker запуск
-echo "YOUR_BOT_TOKEN" | docker secret create bot_token -
 docker build -t telegram-bot .
-docker run -d --name telegram-bot --secret bot_token telegram-bot
+docker run -d --name telegram-bot -e BOT_TOKEN="YOUR_BOT_TOKEN" telegram-bot
 ```
 
 ## 📋 Зміст
@@ -65,13 +64,13 @@ python main.py
 
 ```bash
 # 1. Створення секрету
-echo "YOUR_BOT_TOKEN" | docker secret create bot_token -
+# BOT_TOKEN передається через змінну середовища
 
 # 2. Збірка образу
 docker build -t telegram-bot .
 
 # 3. Запуск
-docker run -d --name telegram-bot --secret bot_token telegram-bot
+docker run -d --name telegram-bot -e BOT_TOKEN="YOUR_BOT_TOKEN" telegram-bot
 ```
 
 > 📖 **Детальні інструкції**: [QUICK_START.md](QUICK_START.md)
@@ -121,11 +120,11 @@ graph TD
 
 ```bash
 # Створення секрету
-echo "YOUR_BOT_TOKEN" | docker secret create bot_token -
+# BOT_TOKEN передається через змінну середовища
 
 # Збірка та запуск
 docker build -t telegram-bot .
-docker run -d --name telegram-bot --secret bot_token telegram-bot
+docker run -d --name telegram-bot -e BOT_TOKEN="YOUR_BOT_TOKEN" telegram-bot
 ```
 
 ### Docker Compose (рекомендовано)
@@ -149,7 +148,7 @@ docker-compose up -d
 docker swarm init
 
 # Створення секрету
-echo "YOUR_BOT_TOKEN" | docker secret create bot_token -
+# BOT_TOKEN передається через змінну середовища
 
 # Запуск сервісу
 docker service create \
