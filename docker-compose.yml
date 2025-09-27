@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  telegram-bot:
+    build: .
+    container_name: telegram-bot
+    restart: unless-stopped
+    
+    # Секрети для чутливих даних
+    secrets:
+      - bot_token
+    
+    # Змінні середовища
+    environment:
+      - BOT_NAME=${BOT_NAME:-Telegram Bot}
+      - BOT_VERSION=${BOT_VERSION:-1.0.0}
+      - BOT_DEVELOPER=${BOT_DEVELOPER:-Your Name}
+      - BOT_EMAIL=${BOT_EMAIL:-your.email@example.com}
+      - BOT_GITHUB=${BOT_GITHUB:-github.com/yourusername}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - PYTHONUNBUFFERED=1
+    
+    # Монтування томів (опціонально)
+    volumes:
+      - ./logs:/app/logs
+    
+    # Залежності (якщо потрібно)
+    # depends_on:
+    #   - redis
+    #   - database
+
+# Секрети
+secrets:
+  bot_token:
+    external: true
+
+# Додаткові сервіси (опціонально)
+# services:
+#   redis:
+#     image: redis:7-alpine
+#     container_name: telegram-bot-redis
+#     restart: unless-stopped
+#     ports:
+#       - "6379:6379"
+#   
+#   database:
+#     image: postgres:15-alpine
+#     container_name: telegram-bot-db
+#     restart: unless-stopped
+#     environment:
+#       - POSTGRES_DB=telegram_bot
+#       - POSTGRES_USER=bot_user
+#       - POSTGRES_PASSWORD=bot_password
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#     ports:
+#       - "5432:5432"
+
+# volumes:
+#   postgres_data:
