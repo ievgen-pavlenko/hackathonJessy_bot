@@ -313,7 +313,7 @@ async def health_check():
 
 ```bash
 # Перевірка API
-curl https://your-api-domain.com/api/jokes/random
+curl http://joke-api:8080/api/getJoke
 
 # Тест функцій
 python test_joke.py

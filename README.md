@@ -221,7 +221,7 @@ docker run -d \
   --name telegram-bot \
   -e BOT_TOKEN="YOUR_BOT_TOKEN" \
   -e BOT_NAME="Production Bot" \
-  -e JOKES_API_URL="https://your-api.com/jokes/random" \
+  -e JOKES_API_URL="http://joke-api:8080" \
   telegram-bot
 ```
 
@@ -251,7 +251,7 @@ spec:
         - name: BOT_NAME
           value: "Production Bot"
         - name: JOKES_API_URL
-          value: "https://your-api.com"
+          value: "http://joke-api:8080"
         - name: JOKES_API_ENDPOINT
           value: "/api/getJoke"
 ```

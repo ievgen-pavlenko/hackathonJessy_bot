@@ -146,7 +146,7 @@ docker system prune -f
 
 ```bash
 # В config.env або як змінна середовища
-JOKES_API_URL=https://your-api-domain.com/api/jokes/random
+JOKES_API_URL=http://joke-api:8080
 JOKES_API_KEY=your_api_key_here  # опціонально
 ```
 
@@ -157,7 +157,7 @@ JOKES_API_KEY=your_api_key_here  # опціонально
 python test_joke.py
 
 # Перевірка API вручну
-curl https://your-api-domain.com/api/jokes/random
+curl http://joke-api:8080/api/getJoke
 ```
 
 > 📖 **Детальне налаштування**: [API_SETUP.md](API_SETUP.md)
@@ -171,7 +171,7 @@ curl https://your-api-domain.com/api/jokes/random
 BOT_TOKEN=your_development_token
 BOT_NAME=Dev Bot
 LOG_LEVEL=DEBUG
-JOKES_API_URL=https://your-api.com/jokes/random
+JOKES_API_URL=http://joke-api:8080
 ```
 
 ### Продакшн
@@ -182,7 +182,7 @@ docker run -d \
   --name telegram-bot \
   -e BOT_TOKEN="YOUR_BOT_TOKEN" \
   -e BOT_NAME="Production Bot" \
-  -e JOKES_API_URL="https://your-api.com/jokes/random" \
+  -e JOKES_API_URL="http://joke-api:8080" \
   telegram-bot
 ```
 
@@ -212,7 +212,7 @@ docker ps -a
 
 ```bash
 # Перевірка API
-curl https://your-api-domain.com/api/jokes/random
+curl http://joke-api:8080/api/getJoke
 
 # Логи API
 docker logs telegram-bot | grep -i joke

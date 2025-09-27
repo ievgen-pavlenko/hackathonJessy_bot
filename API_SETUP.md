@@ -8,10 +8,10 @@
 
 ```bash
 # В config.env файлі
-JOKES_API_URL=https://your-api-domain.com/api/jokes/random
+JOKES_API_URL=http://joke-api:8080
 
 # Або через змінну середовища
-export JOKES_API_URL=https://your-api-domain.com/api/jokes/random
+export JOKES_API_URL=http://joke-api:8080
 ```
 
 ### 2. Налаштування авторизації (опціонально)
@@ -81,11 +81,11 @@ python test_joke.py
 
 ```bash
 # Перевірка доступності API
-curl https://your-api-domain.com/api/jokes/random
+curl http://joke-api:8080/api/getJoke
 
 # З авторизацією
 curl -H "Authorization: Bearer your_api_key" \
-     https://your-api-domain.com/api/jokes/random
+     http://joke-api:8080/api/getJoke
 ```
 
 ### 3. Тестування в Docker
@@ -95,7 +95,7 @@ curl -H "Authorization: Bearer your_api_key" \
 docker run -d \
   --name telegram-bot \
   -e BOT_TOKEN="YOUR_BOT_TOKEN" \
-  -e JOKES_API_URL="https://your-api-domain.com/api/jokes/random" \
+  -e JOKES_API_URL="http://joke-api:8080" \
   -e JOKES_API_KEY="your_api_key" \
   telegram-bot
 
@@ -131,7 +131,7 @@ docker logs telegram-bot | grep -E "(joke|error|warning)"
 
 ```bash
 # 1. Налаштування
-export JOKES_API_URL="https://your-api.com/jokes/random"
+export JOKES_API_URL="http://joke-api:8080"
 export JOKES_API_KEY="your_api_key"
 
 # 2. Запуск
@@ -148,7 +148,7 @@ services:
     build: .
     environment:
       - BOT_TOKEN=${BOT_TOKEN}
-      - JOKES_API_URL=https://your-api.com
+      - JOKES_API_URL=http://joke-api:8080
       - JOKES_API_ENDPOINT=/api/getJoke
       - JOKES_API_KEY=your_api_key
       - JOKES_API_TIMEOUT=15
@@ -168,7 +168,7 @@ docker service create \
   --name telegram-bot \
   -e BOT_TOKEN="YOUR_BOT_TOKEN" \
   -e JOKES_API_KEY="your_api_key" \
-  --env JOKES_API_URL="https://your-api.com/jokes/random" \
+  --env JOKES_API_URL="http://joke-api:8080" \
   --env JOKES_API_TIMEOUT=15 \
   telegram-bot
 ```
@@ -179,10 +179,10 @@ docker service create \
 
 ```bash
 # Перевірка доступності
-curl -I https://your-api-domain.com/api/jokes/random
+curl -I http://joke-api:8080/api/getJoke
 
 # Перевірка DNS
-nslookup your-api-domain.com
+nslookup joke-api
 ```
 
 ### Проблема: 401 Unauthorized
@@ -190,14 +190,14 @@ nslookup your-api-domain.com
 ```bash
 # Перевірка API ключа
 curl -H "Authorization: Bearer your_api_key" \
-     https://your-api-domain.com/api/jokes/random
+     http://joke-api:8080/api/getJoke
 ```
 
 ### Проблема: 404 Not Found
 
 ```bash
 # Перевірка URL
-curl https://your-api-domain.com/api/jokes/random
+curl http://joke-api:8080/api/getJoke
 
 # Перевірка документації API
 ```
@@ -209,7 +209,7 @@ curl https://your-api-domain.com/api/jokes/random
 export JOKES_API_TIMEOUT=30
 
 # Перевірка швидкості API
-time curl https://your-api-domain.com/api/jokes/random
+time curl http://joke-api:8080/api/getJoke
 ```
 
 ## Моніторинг
@@ -258,7 +258,7 @@ docker run -d \
   --name telegram-bot \
   -e BOT_TOKEN="YOUR_BOT_TOKEN" \
   -e JOKES_API_KEY="your_api_key" \
-  -e JOKES_API_URL="https://your-api.com/jokes/random" \
+  -e JOKES_API_URL="http://joke-api:8080" \
   telegram-bot
 ```
 
