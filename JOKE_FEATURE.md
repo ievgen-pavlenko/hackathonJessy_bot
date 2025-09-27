@@ -4,12 +4,12 @@
 
 ## Огляд
 
-Команда `/joke` додає функціональність отримання випадкових жартів з вашого власного HTTP API до Telegram бота.
+Команда `/joke` додає функціональність отримання персоналізованих жартів на основі введення користувача з вашого власного HTTP API до Telegram бота.
 
 ## Функціональність
 
 ### Команди
-- `/joke` - Отримати випадковий жарт з вашого API
+- `/joke [текст]` - Отримати персоналізований жарт на основі введеного тексту
 
 ### Кнопки
 - **🎭 Joke** - В головному меню для швидкого доступу
@@ -74,7 +74,7 @@
 
 ```bash
 # config.env
-JOKES_API_URL=https://your-api-domain.com
+JOKES_API_URL=http://joke-api:8080
 JOKES_API_ENDPOINT=/api/getJoke
 JOKES_API_TIMEOUT=15
 JOKES_API_KEY=your_api_key_here
@@ -82,12 +82,28 @@ JOKES_API_KEY=your_api_key_here
 
 ### Docker налаштування
 
+#### Docker Compose (рекомендовано)
+
+```bash
+# Запуск з Docker Compose
+docker-compose up -d
+
+# Перевірка статусу
+docker-compose ps
+
+# Логи
+docker-compose logs -f telegram-bot
+docker-compose logs -f joke-api
+```
+
+#### Docker Run
+
 ```bash
 # Запуск з вашим API
 docker run -d \
   --name telegram-bot \
   -e BOT_TOKEN="YOUR_BOT_TOKEN" \
-  -e JOKES_API_URL="https://your-api-domain.com" \
+  -e JOKES_API_URL="http://joke-api:8080" \
   -e JOKES_API_ENDPOINT="/api/getJoke" \
   -e JOKES_API_KEY="your_api_key" \
   -e JOKES_API_TIMEOUT=15 \

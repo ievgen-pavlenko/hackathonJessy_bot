@@ -165,7 +165,7 @@ docker service create \
 
 ```bash
 # В config.env або як змінна середовища
-JOKES_API_URL=https://your-api-domain.com/api/jokes/random
+JOKES_API_URL=http://joke-api:8080
 JOKES_API_KEY=your_api_key_here  # опціонально
 JOKES_API_TIMEOUT=15             # опціонально
 ```
@@ -210,7 +210,7 @@ JOKES_API_TIMEOUT=15             # опціонально
 BOT_TOKEN=your_development_token
 BOT_NAME=Dev Bot
 LOG_LEVEL=DEBUG
-JOKES_API_URL=https://your-api.com/jokes/random
+JOKES_API_URL=http://joke-api:8080
 ```
 
 #### Docker

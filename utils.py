@@ -78,19 +78,24 @@ def get_user_mention(user) -> str:
     return f"[{user.first_name}](tg://user?id={user.id})"
 
 # Jokes API functions
-async def fetch_joke() -> Optional[Dict[str, Any]]:
-    """Fetch a random joke from your custom API using POST request"""
+async def fetch_joke(user_input: str = "Розкажи анекдот") -> Optional[Dict[str, Any]]:
+    """Fetch a joke from your custom API using POST request with user input"""
     try:
         # Prepare request data according to API schema
         request_data = {
-            "input": "Розкажи анекдот"  # Required field, content is ignored by model
+            "input": user_input  # User input is passed to the API
         }
         
         # Get full API URL with endpoint
         api_url = Config.get_jokes_api_url()
         if not api_url:
             logger.error("Jokes API URL is not configured")
+            logger.error("Set JOKES_API_URL environment variable")
             return None
+        
+        logger.info(f"Making request to: {api_url}")
+        logger.info(f"Request data: {request_data}")
+        logger.info(f"Headers: {Config.JOKES_API_HEADERS}")
         
         # Use asyncio to run the blocking request in a thread pool
         loop = asyncio.get_event_loop()
@@ -119,6 +124,8 @@ async def fetch_joke() -> Optional[Dict[str, Any]]:
             return None
         elif response.status_code == 500:
             logger.error("Jokes API internal server error")
+            logger.error(f"Response body: {response.text}")
+            logger.error("Possible causes: API server not configured, database issues, missing env vars")
             return None
         elif response.status_code >= 500:
             logger.error(f"Jokes API server error: {response.status_code}")
@@ -159,7 +166,7 @@ def format_joke(joke_data: Dict[str, Any]) -> str:
         
         return "😅 Sorry, I couldn't fetch a joke right now. Try again later!"
 
-async def get_random_joke() -> str:
-    """Get a formatted random joke"""
-    joke_data = await fetch_joke()
+async def get_random_joke(user_input: str = "Розкажи анекдот") -> str:
+    """Get a formatted joke based on user input"""
+    joke_data = await fetch_joke(user_input)
     return format_joke(joke_data)

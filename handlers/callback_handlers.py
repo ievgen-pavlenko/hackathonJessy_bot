@@ -19,12 +19,8 @@ Choose an option below:
     """
     
     keyboard = [
-        [InlineKeyboardButton("📊 Statistics", callback_data='stats')],
-        [InlineKeyboardButton("⚙️ Settings", callback_data='settings')],
-        [InlineKeyboardButton("🎭 Joke", callback_data='joke')],
-        [InlineKeyboardButton("📝 Notes", callback_data='notes')],
-        [InlineKeyboardButton("🎮 Games", callback_data='games')],
-        [InlineKeyboardButton("ℹ️ About", callback_data='info')],
+        [InlineKeyboardButton("📊 Statistics", callback_data='stats'), InlineKeyboardButton("⚙️ Settings", callback_data='settings')],
+        [InlineKeyboardButton("🎭 Joke", callback_data='joke'), InlineKeyboardButton("ℹ️ About", callback_data='info')],
         [InlineKeyboardButton("❓ Help", callback_data='help')]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -49,10 +45,6 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         await handle_stats_callback(query)
     elif query.data == 'settings':
         await handle_settings_callback(query)
-    elif query.data == 'notes':
-        await handle_notes_callback(query)
-    elif query.data == 'games':
-        await handle_games_callback(query)
     elif query.data == 'contact':
         await handle_contact_callback(query)
     elif query.data == 'echo_again':
@@ -140,45 +132,6 @@ async def handle_settings_callback(query):
     reply_markup = InlineKeyboardMarkup(keyboard)
     await query.edit_message_text(settings_text, reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN)
 
-async def handle_notes_callback(query):
-    """Handle notes button callback."""
-    notes_text = """
-📝 **Notes**
-
-**Your Notes:**
-• No notes yet
-
-**Features:**
-• Create and save notes
-• Organize by categories
-• Search functionality
-• Export options
-
-*Note: This feature is coming soon!*
-    """
-    keyboard = [[InlineKeyboardButton("🔙 Back to Menu", callback_data='menu')]]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    await query.edit_message_text(notes_text, reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN)
-
-async def handle_games_callback(query):
-    """Handle games button callback."""
-    games_text = """
-🎮 **Games**
-
-**Available Games:**
-• Coming Soon!
-
-**Planned Games:**
-• Number Guessing
-• Word Games
-• Trivia
-• Mini Puzzles
-
-*Games feature is under development!*
-    """
-    keyboard = [[InlineKeyboardButton("🔙 Back to Menu", callback_data='menu')]]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    await query.edit_message_text(games_text, reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN)
 
 async def handle_contact_callback(query):
     """Handle contact button callback."""
@@ -201,33 +154,37 @@ async def handle_contact_callback(query):
     await query.edit_message_text(contact_text, reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN)
 
 async def handle_joke_callback(query):
-    """Handle joke button callback."""
+    """Handle joke button callback - ask user for input."""
     try:
-        # Show loading message
-        await query.edit_message_text("🎭 Fetching a joke for you...")
+        # Ask user for joke input
+        joke_prompt = """
+🎭 **Tell me what kind of joke you want!**
+
+Send me a message with your request, for example:
+• "Tell me a programming joke"
+• "I want a dad joke"
+• "Make me laugh about cats"
+• Or just send any text!
+
+I'll create a personalized joke for you! 😄
+        """
         
-        # Get random joke
-        joke_text = await get_random_joke()
-        
-        # Update with joke and buttons
         keyboard = [
-            [InlineKeyboardButton("🎭 Another Joke", callback_data='joke')],
             [InlineKeyboardButton("🔙 Back to Menu", callback_data='menu')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         await query.edit_message_text(
-            joke_text, 
+            joke_prompt, 
             reply_markup=reply_markup, 
             parse_mode=ParseMode.MARKDOWN
         )
         
     except Exception as e:
         logger.error(f"Error in joke callback: {e}")
-        error_text = "😅 Sorry, I couldn't fetch a joke right now. Try again later!"
+        error_text = "😅 Sorry, something went wrong. Please try again!"
         keyboard = [
-            [InlineKeyboardButton("🔄 Try Again", callback_data='joke')],
-            [InlineKeyboardButton("🔙 Back to Menu", callback_data='menu')]
+            [InlineKeyboardButton("🔄 Try Again", callback_data='joke'), InlineKeyboardButton("🔙 Back to Menu", callback_data='menu')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
