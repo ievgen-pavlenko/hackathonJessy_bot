@@ -108,7 +108,6 @@ graph TD
     C --> H[error_handlers.py]
     
     B --> I[Environment Variables]
-    B --> J[Docker Secrets]
     
     D --> K[Logging]
     D --> L[API Integration]
@@ -153,7 +152,7 @@ docker swarm init
 # Запуск сервісу
 docker service create \
   --name telegram-bot \
-  --secret bot_token \
+  -e BOT_TOKEN="YOUR_BOT_TOKEN" \
   --env BOT_NAME="Production Bot" \
   telegram-bot
 ```
@@ -220,7 +219,7 @@ JOKES_API_URL=https://your-api.com/jokes/random
 # Використання секретів
 docker run -d \
   --name telegram-bot \
-  --secret bot_token \
+  -e BOT_TOKEN="YOUR_BOT_TOKEN" \
   -e BOT_NAME="Production Bot" \
   -e JOKES_API_URL="https://your-api.com/jokes/random" \
   telegram-bot
@@ -229,14 +228,6 @@ docker run -d \
 #### Kubernetes
 
 ```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: telegram-bot-secret
-type: Opaque
-data:
-  bot-token: <base64-encoded-token>
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -255,18 +246,14 @@ spec:
       - name: telegram-bot
         image: telegram-bot:latest
         env:
+        - name: BOT_TOKEN
+          value: "YOUR_BOT_TOKEN"
         - name: BOT_NAME
           value: "Production Bot"
         - name: JOKES_API_URL
-          value: "https://your-api.com/jokes/random"
-        volumeMounts:
-        - name: bot-secret
-          mountPath: /run/secrets
-          readOnly: true
-      volumes:
-      - name: bot-secret
-        secret:
-          secretName: telegram-bot-secret
+          value: "https://your-api.com"
+        - name: JOKES_API_ENDPOINT
+          value: "/api/getJoke"
 ```
 
 ## 🛠️ Розробка
@@ -361,7 +348,7 @@ tests/
 echo $BOT_TOKEN
 
 # Або для Docker
-docker exec telegram-bot cat /run/secrets/bot_token
+docker exec telegram-bot printenv BOT_TOKEN
 ```
 
 #### 2. Контейнер не запускається

@@ -28,10 +28,10 @@ git status
 git commit -m "🎉 Initial commit: Telegram Bot with Docker support
 
 - Add modular bot architecture with handlers
-- Add Docker support with secrets and environment variables
+- Add Docker support with environment variables
 - Add Joke API integration with external API support
 - Add comprehensive documentation with navigation
-- Add security features with Docker secrets
+- Add security features with environment variables
 - Add testing scripts and examples
 - Add contributing guidelines and changelog"
 
@@ -152,7 +152,7 @@ jobs:
 
 ### 2. Налаштування секретів
 
-1. Перейдіть в Settings → Secrets and variables → Actions
+1. Перейдіть в Settings → Secrets and variables → Actions (для GitHub Actions)
 2. Додайте необхідні секрети:
    - `BOT_TOKEN` - токен Telegram бота
    - `JOKES_API_URL` - URL вашого API

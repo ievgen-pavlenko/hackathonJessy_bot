@@ -94,7 +94,7 @@ curl -H "Authorization: Bearer your_api_key" \
 # Запуск з вашим API
 docker run -d \
   --name telegram-bot \
-  --secret bot_token \
+  -e BOT_TOKEN="YOUR_BOT_TOKEN" \
   -e JOKES_API_URL="https://your-api-domain.com/api/jokes/random" \
   -e JOKES_API_KEY="your_api_key" \
   telegram-bot
@@ -146,30 +146,28 @@ version: '3.8'
 services:
   telegram-bot:
     build: .
-    secrets:
-      - bot_token
     environment:
-      - JOKES_API_URL=https://your-api.com/jokes/random
+      - BOT_TOKEN=${BOT_TOKEN}
+      - JOKES_API_URL=https://your-api.com
+      - JOKES_API_ENDPOINT=/api/getJoke
       - JOKES_API_KEY=your_api_key
       - JOKES_API_TIMEOUT=15
     restart: unless-stopped
 
-secrets:
-  bot_token:
-    external: true
 ```
 
 ### Docker Swarm
 
 ```bash
 # Створення секрету для API ключа
-echo "your_api_key" | docker secret create jokes_api_key -
+# Змінні середовища
+export JOKES_API_KEY="your_api_key"
 
 # Запуск сервісу
 docker service create \
   --name telegram-bot \
-  --secret bot_token \
-  --secret jokes_api_key \
+  -e BOT_TOKEN="YOUR_BOT_TOKEN" \
+  -e JOKES_API_KEY="your_api_key" \
   --env JOKES_API_URL="https://your-api.com/jokes/random" \
   --env JOKES_API_TIMEOUT=15 \
   telegram-bot
@@ -244,7 +242,7 @@ docker logs telegram-bot | grep "Jokes API" | grep -i error
 ### Рекомендації
 
 1. **HTTPS**: Використовуйте тільки HTTPS для API
-2. **API ключі**: Зберігайте в Docker secrets
+2. **API ключі**: Зберігайте в змінних середовища
 3. **Таймаути**: Встановлюйте розумні таймаути
 4. **Логування**: Не логуйте API ключі
 
@@ -252,13 +250,14 @@ docker logs telegram-bot | grep "Jokes API" | grep -i error
 
 ```bash
 # Створення секрету
-echo "your_api_key" | docker secret create jokes_api_key -
+# Змінні середовища
+export JOKES_API_KEY="your_api_key"
 
 # Запуск з секретом
 docker run -d \
   --name telegram-bot \
-  --secret bot_token \
-  --secret jokes_api_key \
+  -e BOT_TOKEN="YOUR_BOT_TOKEN" \
+  -e JOKES_API_KEY="your_api_key" \
   -e JOKES_API_URL="https://your-api.com/jokes/random" \
   telegram-bot
 ```

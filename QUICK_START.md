@@ -72,10 +72,10 @@ docker-compose down
 docker swarm init
 
 # Секрет
-echo "YOUR_TOKEN" | docker secret create bot_token -
+# BOT_TOKEN передається через змінну середовища
 
 # Сервіс
-docker service create --name telegram-bot --secret bot_token telegram-bot
+docker service create --name telegram-bot -e BOT_TOKEN="YOUR_BOT_TOKEN" telegram-bot
 
 # Масштабування
 docker service scale telegram-bot=3
@@ -97,7 +97,7 @@ docker exec -it telegram-bot bash
 docker exec telegram-bot env | grep BOT
 
 # Перевірка секрету
-docker exec telegram-bot cat /run/secrets/bot_token
+docker exec telegram-bot printenv BOT_TOKEN
 ```
 
 ## 📊 Моніторинг
@@ -177,10 +177,10 @@ JOKES_API_URL=https://your-api.com/jokes/random
 ### Продакшн
 
 ```bash
-# Docker з секретами
+# Docker з змінними середовища
 docker run -d \
   --name telegram-bot \
-  --secret bot_token \
+  -e BOT_TOKEN="YOUR_BOT_TOKEN" \
   -e BOT_NAME="Production Bot" \
   -e JOKES_API_URL="https://your-api.com/jokes/random" \
   telegram-bot
@@ -195,7 +195,7 @@ docker run -d \
 echo $BOT_TOKEN
 
 # Для Docker
-docker exec telegram-bot cat /run/secrets/bot_token
+docker exec telegram-bot printenv BOT_TOKEN
 ```
 
 ### Контейнер не запускається

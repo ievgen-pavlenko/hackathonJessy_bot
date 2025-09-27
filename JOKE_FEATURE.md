@@ -86,7 +86,7 @@ JOKES_API_KEY=your_api_key_here
 # Запуск з вашим API
 docker run -d \
   --name telegram-bot \
-  --secret bot_token \
+  -e BOT_TOKEN="YOUR_BOT_TOKEN" \
   -e JOKES_API_URL="https://your-api-domain.com" \
   -e JOKES_API_ENDPOINT="/api/getJoke" \
   -e JOKES_API_KEY="your_api_key" \
@@ -137,7 +137,7 @@ python main.py
 # Запуск з налаштуваннями
 docker run -d \
   --name telegram-bot \
-  --secret bot_token \
+  -e BOT_TOKEN="YOUR_BOT_TOKEN" \
   -e JOKES_API_URL="https://your-jokes-api.com/random" \
   -e JOKES_API_TIMEOUT=15 \
   telegram-bot
@@ -236,7 +236,7 @@ async def get_joke_by_category(category: str):
 
 ### Рекомендації
 
-1. **API ключі**: Зберігайте в Docker secrets
+1. **API ключі**: Зберігайте в змінних середовища
 2. **Таймаути**: Встановлюйте розумні таймаути
 3. **Валідація**: Перевіряйте відповіді API
 4. **Логування**: Не логуйте чутливі дані
@@ -244,14 +244,14 @@ async def get_joke_by_category(category: str):
 ### Приклад безпечної конфігурації
 
 ```bash
-# Docker secret
-echo "your_api_key" | docker secret create jokes_api_key -
+# Змінні середовища
+export JOKES_API_KEY="your_api_key"
 
 # Docker run
 docker run -d \
   --name telegram-bot \
-  --secret bot_token \
-  --secret jokes_api_key \
+  -e BOT_TOKEN="YOUR_BOT_TOKEN" \
+  -e JOKES_API_KEY="your_api_key" \
   telegram-bot
 ```
 

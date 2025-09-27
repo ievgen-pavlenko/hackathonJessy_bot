@@ -73,9 +73,8 @@ version: '3.8'
 services:
   telegram-bot:
     build: .
-    secrets:
-      - bot_token
     environment:
+      - BOT_TOKEN=${BOT_TOKEN}
       - BOT_NAME=My Bot
       - DATABASE_URL=postgresql://user:pass@db:5432/botdb
     depends_on:
@@ -91,9 +90,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-secrets:
-  bot_token:
-    external: true
 
 volumes:
   postgres_data:
@@ -107,8 +103,8 @@ version: '3.8'
 services:
   telegram-bot:
     build: .
-    secrets:
-      - bot_token
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
     environment:
       - BOT_NAME=My Bot
       - REDIS_URL=redis://redis:6379
@@ -120,9 +116,6 @@ services:
     image: redis:7-alpine
     restart: unless-stopped
 
-secrets:
-  bot_token:
-    external: true
 ```
 
 ## 🐳 Docker Swarm
@@ -258,8 +251,8 @@ docker run -it --rm telegram-bot bash
 # Перевірка змінних
 docker exec telegram-bot env | grep BOT
 
-# Перевірка секретів
-docker exec telegram-bot cat /run/secrets/bot_token
+# Перевірка змінних середовища
+docker exec telegram-bot printenv BOT_TOKEN
 ```
 
 ### 3. Тестування
