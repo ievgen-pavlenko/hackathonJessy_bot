@@ -4,7 +4,7 @@
 [![Python](https://img.shields.io/badge/Python-3.11+-green?logo=python)](https://python.org/)
 [![Telegram](https://img.shields.io/badge/Telegram-Bot-2CA5E0?logo=telegram)](https://telegram.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/yourusername/telegram-bot)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/EvOwl/hackathonJessy_bot.git)
 
 Модульний Telegram бот з інтерактивним меню, Docker підтримкою та інтеграцією з зовнішніми API.
 
@@ -13,7 +13,7 @@
 ### Клонування репозиторію
 
 ```bash
-git clone https://github.com/yourusername/telegram-bot.git
+git clone https://github.com/EvOwl/hackathonJessy_bot.git
 cd telegram-bot
 ```
 
@@ -179,11 +179,23 @@ JOKES_API_TIMEOUT=15             # опціонально
 
 ### Команди та кнопки
 
-- **`/joke`** - Отримати випадковий жарт
+#### Основні команди
+- **`/start`** - Запуск бота та привітання
+- **`/help`** - Довідка по командах
+- **`/info`** - Інформація про бота
+- **`/menu`** - Головне меню
+- **`/stats`** - Статистика бота
+- **`/admin`** - Адміністративна панель (тільки для адміністраторів)
+
+#### Функції
+- **`/joke`** - Отримати персоналізований жарт
 - **🎭 Joke** - Кнопка в головному меню
 - **🎭 Another Joke** - Для нового жарту
+- **📊 Statistics** - Статистика бота
+- **👥 Admin Panel** - Панель адміністратора
 
 > 📖 **Детальна документація**: [JOKE_FEATURE.md](JOKE_FEATURE.md)  
+> 📊 **Статистика**: [STATISTICS_FEATURE.md](STATISTICS_FEATURE.md)  
 > 🔧 **Налаштування API**: [API_SETUP.md](API_SETUP.md)
 
 ## 🔧 Налаштування
@@ -200,6 +212,8 @@ JOKES_API_TIMEOUT=15             # опціонально
 | `LOG_LEVEL` | Рівень логування | ❌ | `INFO` |
 | `JOKES_API_URL` | URL вашого API | ❌ | - |
 | `JOKES_API_KEY` | API ключ | ❌ | - |
+| `ADMIN_USER_IDS` | ID адміністраторів (через кому) | ❌ | - |
+| `STATS_DATA_DIR` | Папка для збереження статистики | ❌ | `data` |
 
 ### Конфігурація для різних середовищ
 

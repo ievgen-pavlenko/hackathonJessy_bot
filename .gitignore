@@ -185,6 +185,7 @@ site/
 *.db
 *.sqlite
 *.sqlite3
+.data/
 
 # Secrets and sensitive data
 secrets/

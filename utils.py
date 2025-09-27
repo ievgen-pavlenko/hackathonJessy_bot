@@ -5,8 +5,11 @@ import logging
 import requests
 import asyncio
 from datetime import datetime
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Union
 from config import Config
+from stats import stats_manager
+from base import UserInfo
+from constants import APIConstants, BotConstants
 
 logger = logging.getLogger(__name__)
 
@@ -170,3 +173,46 @@ async def get_random_joke(user_input: str = "Розкажи анекдот") -> 
     """Get a formatted joke based on user input"""
     joke_data = await fetch_joke(user_input)
     return format_joke(joke_data)
+
+def track_user_interaction(user_id: int, username: str = None, first_name: str = None, last_name: str = None):
+    """Track user interaction for statistics (legacy method)"""
+    try:
+        user_info = UserInfo(
+            user_id=user_id,
+            username=username,
+            first_name=first_name,
+            last_name=last_name
+        )
+        stats_manager.track_user(user_info)
+        logger.info(f"User interaction tracked: {user_id} (@{username or 'unknown'})")
+    except Exception as e:
+        logger.error(f"Error tracking user interaction: {e}")
+
+def track_user_interaction_new(user_info: UserInfo):
+    """Track user interaction for statistics (new method)"""
+    try:
+        stats_manager.track_user(user_info)
+        logger.info(f"User interaction tracked: {user_info.user_id} (@{user_info.username or 'unknown'})")
+    except Exception as e:
+        logger.error(f"Error tracking user interaction: {e}")
+
+def track_command_usage(user_id: int, command: str):
+    """Track command usage for statistics"""
+    try:
+        stats_manager.track_command(user_id, command)
+        logger.info(f"Command usage tracked: {command} by user {user_id}")
+    except Exception as e:
+        logger.error(f"Error tracking command usage: {e}")
+
+def is_admin(user_id: int) -> bool:
+    """Check if user is admin"""
+    return user_id in Config.ADMIN_USER_IDS
+
+def get_user_mention(user_id: int, username: str = None, first_name: str = None) -> str:
+    """Get user mention string"""
+    if username:
+        return f"@{username}"
+    elif first_name:
+        return f"[{first_name}](tg://user?id={user_id})"
+    else:
+        return f"[User](tg://user?id={user_id})"

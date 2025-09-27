@@ -6,7 +6,10 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 from config import Config
-from utils import get_random_joke
+from utils import get_random_joke, track_user_interaction, track_command_usage, is_admin
+from stats import stats_manager
+from base import UserInfo
+from constants import MessageTemplates, KeyboardLayouts, ButtonTexts
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +20,16 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if not update.message:
             logger.error("Update.message is None in start command")
             return
+        
+        # Track user interaction
+        user = update.message.from_user
+        track_user_interaction(
+            user_id=user.id,
+            username=user.username,
+            first_name=user.first_name,
+            last_name=user.last_name
+        )
+        track_command_usage(user.id, '/start')
             
         user = update.effective_user
         welcome_message = f"""
@@ -52,6 +65,16 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         if not update.message:
             logger.error("Update.message is None in help command")
             return
+        
+        # Track user interaction
+        user = update.message.from_user
+        track_user_interaction(
+            user_id=user.id,
+            username=user.username,
+            first_name=user.first_name,
+            last_name=user.last_name
+        )
+        track_command_usage(user.id, '/help')
             
         help_text = """
 🆘 **Help & Commands**
@@ -62,6 +85,8 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 /info - Get bot information
 /menu - Show interactive menu
 /joke - Get a random joke
+/stats - Show bot statistics
+/admin - Admin panel (admin only)
 
 **Features:**
 • Interactive buttons and menus
@@ -98,6 +123,16 @@ async def info_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         if not update.message:
             logger.error("Update.message is None in info command")
             return
+        
+        # Track user interaction
+        user = update.message.from_user
+        track_user_interaction(
+            user_id=user.id,
+            username=user.username,
+            first_name=user.first_name,
+            last_name=user.last_name
+        )
+        track_command_usage(user.id, '/info')
             
         info_text = f"""
 ℹ️ **Bot Information**
@@ -112,7 +147,7 @@ async def info_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 • User-friendly interface
 
 **Developer:** {Config.BOT_DEVELOPER}
-**Created:** 2024
+**Created:** 2025
 
 This bot is built with python-telegram-bot library.
         """
@@ -136,6 +171,16 @@ async def menu_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         if not update.message:
             logger.error("Update.message is None in menu command")
             return
+        
+        # Track user interaction
+        user = update.message.from_user
+        track_user_interaction(
+            user_id=user.id,
+            username=user.username,
+            first_name=user.first_name,
+            last_name=user.last_name
+        )
+        track_command_usage(user.id, '/menu')
             
         from handlers.callback_handlers import show_menu
         await show_menu(update, context)
@@ -152,6 +197,16 @@ async def joke_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         if not update.message:
             logger.error("Update.message is None in joke command")
             return
+        
+        # Track user interaction
+        user = update.message.from_user
+        track_user_interaction(
+            user_id=user.id,
+            username=user.username,
+            first_name=user.first_name,
+            last_name=user.last_name
+        )
+        track_command_usage(user.id, '/joke')
         
         # Send loading message
         loading_message = await update.message.reply_text("🎭 Fetching a joke for you...")
@@ -186,5 +241,88 @@ async def joke_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                 error_message, 
                 reply_markup=reply_markup
             )
+
+async def stats_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Show bot statistics."""
+    try:
+        # Check if update.message exists
+        if not update.message:
+            logger.error("Update.message is None in stats command")
+            return
+        
+        # Track user interaction
+        user = update.message.from_user
+        track_user_interaction(
+            user_id=user.id,
+            username=user.username,
+            first_name=user.first_name,
+            last_name=user.last_name
+        )
+        track_command_usage(user.id, '/stats')
+        
+        # Get statistics
+        stats_text = stats_manager.get_stats_summary()
+        
+        # Create keyboard
+        keyboard = [
+            [InlineKeyboardButton("🔄 Refresh", callback_data='stats'), InlineKeyboardButton("📋 Menu", callback_data='menu')]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await update.message.reply_text(
+            stats_text, 
+            reply_markup=reply_markup, 
+            parse_mode=ParseMode.HTML
+        )
+        
+    except Exception as e:
+        logger.error(f"Error in stats command: {e}")
+        if update.message:
+            await update.message.reply_text("😅 Sorry, couldn't get statistics right now. Try again later!")
+
+async def admin_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Admin-only command for user management."""
+    try:
+        # Check if update.message exists
+        if not update.message:
+            logger.error("Update.message is None in admin command")
+            return
+        
+        user = update.message.from_user
+        
+        # Check if user is admin
+        if not is_admin(user.id):
+            await update.message.reply_text("❌ Access denied. This command is for administrators only.")
+            return
+        
+        # Track user interaction
+        track_user_interaction(
+            user_id=user.id,
+            username=user.username,
+            first_name=user.first_name,
+            last_name=user.last_name
+        )
+        track_command_usage(user.id, '/admin')
+        
+        # Get users list
+        users_text = stats_manager.get_users_list(limit=20)
+        
+        # Create keyboard
+        keyboard = [
+            [InlineKeyboardButton("🔄 Refresh", callback_data='admin'), InlineKeyboardButton("📊 Stats", callback_data='stats')],
+            [InlineKeyboardButton("📋 Menu", callback_data='menu')]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await update.message.reply_text(
+            users_text, 
+            reply_markup=reply_markup, 
+            parse_mode=ParseMode.HTML
+        )
+        
+    except Exception as e:
+        logger.error(f"Error in admin command: {e}")
+        if update.message:
+            await update.message.reply_text("😅 Sorry, couldn't get admin data right now. Try again later!")
         else:
             logger.error("Cannot send error message: update.message is None")
