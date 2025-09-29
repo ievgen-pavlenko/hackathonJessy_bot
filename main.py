@@ -12,7 +12,7 @@ from handlers.base_handlers import (
     StartCommandHandler, HelpCommandHandler, InfoCommandHandler,
     MenuCommandHandler, StatsCommandHandler, AdminCommandHandler,
     JokeCommandHandler, StatsCallbackHandler,
-    AdminCallbackHandler, JokeCallbackHandler
+    AdminCallbackHandler, JokeCallbackHandler, LanguageCommandHandler
 )
 from handlers.callback_handlers import button_callback
 from handlers.error_handlers import error_handler
@@ -34,6 +34,7 @@ joke_handler = JokeCommandHandler()
 stats_callback_handler = StatsCallbackHandler()
 admin_callback_handler = AdminCallbackHandler()
 joke_callback_handler = JokeCallbackHandler()
+language_handler = LanguageCommandHandler()
 
 def main() -> None:
     """Start the bot."""
@@ -48,6 +49,7 @@ def main() -> None:
     application.add_handler(CommandHandler("joke", joke_handler.handle))
     application.add_handler(CommandHandler("stats", stats_handler.handle))
     application.add_handler(CommandHandler("admin", admin_handler.handle))
+    application.add_handler(CommandHandler("language", language_handler.handle))
     
     # Register message handler
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))

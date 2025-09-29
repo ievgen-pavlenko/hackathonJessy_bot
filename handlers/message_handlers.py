@@ -7,8 +7,10 @@ from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 from utils import get_random_joke, track_user_interaction, track_command_usage
 from base import UserInfo
-from constants import MessageTemplates, KeyboardLayouts, ButtonTexts
+from constants import TranslationKeys
 from user_states import state_manager, UserState
+from stats import stats_manager
+from localization import translate
 
 logger = logging.getLogger(__name__)
 
@@ -60,24 +62,18 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 async def handle_normal_echo(update: Update, user_message: str) -> None:
     """Handle normal echo response"""
+    user_id = update.message.from_user.id
+    lang = stats_manager.get_user_language(user_id)
+
     # Echo the message back to the user
-    echo_response = f"📝 You said: {user_message}"
+    echo_response = translate(TranslationKeys.YOU_SAID, lang).format(user_message=user_message)
     
     # Add helpful message
-    help_text = """
-🤖 I'm a joke bot! Here's what I can do:
-
-• Send me any text and I'll create a personalized joke
-• Use /joke to get a random joke
-• Use /menu to see all available commands
-• Use /help for more information
-
-Try sending me something like "Tell me a programming joke" or "I want a dad joke"!
-    """
+    help_text = translate(TranslationKeys.JOKE_BOT_HELP, lang)
     
     # Create keyboard with options
     keyboard = [
-        [InlineKeyboardButton("🎭 Create Joke", callback_data='joke'), InlineKeyboardButton("📋 Menu", callback_data='menu')]
+        [InlineKeyboardButton(translate(TranslationKeys.CREATE_JOKE, lang), callback_data='joke'), InlineKeyboardButton(translate(TranslationKeys.MENU, lang), callback_data='menu')]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
@@ -89,16 +85,19 @@ Try sending me something like "Tell me a programming joke" or "I want a dad joke
 
 async def handle_joke_creation(update: Update, user_message: str) -> None:
     """Handle joke creation from user input"""
+    user_id = update.message.from_user.id
+    lang = stats_manager.get_user_language(user_id)
+
     # Send loading message
-    loading_message = await update.message.reply_text("🎭 Creating a joke for you...")
+    loading_message = await update.message.reply_text(translate(TranslationKeys.CREATING_JOKE, lang))
     
     try:
         # Get joke based on user input
-        joke_text = await get_random_joke(user_message)
+        joke_text = await get_random_joke(user_message, lang)
         
         # Update message with joke
         keyboard = [
-            [InlineKeyboardButton("🎭 Another Joke", callback_data='joke'), InlineKeyboardButton("📋 Menu", callback_data='menu')]
+            [InlineKeyboardButton(translate(TranslationKeys.ANOTHER_JOKE, lang), callback_data='joke'), InlineKeyboardButton(translate(TranslationKeys.MENU, lang), callback_data='menu')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         

@@ -7,6 +7,7 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional, Union
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from constants import BotConstants
 
 logger = logging.getLogger(__name__)
 
@@ -214,12 +215,12 @@ class BaseStatsManager(ABC):
         pass
     
     @abstractmethod
-    def get_stats_summary(self) -> str:
+    def get_stats_summary(self, lang: str = "uk") -> str:
         """Get formatted statistics summary"""
         pass
     
     @abstractmethod
-    def get_users_list(self, limit: int = 50) -> str:
+    def get_users_list(self, lang: str = "uk", limit: int = BotConstants.DEFAULT_USERS_LIMIT) -> str:
         """Get formatted users list"""
         pass
 

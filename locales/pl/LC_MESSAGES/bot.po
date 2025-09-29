@@ -1,0 +1,193 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-29 12:00+0000\n"
+"PO-Revision-Date: 2025-09-29 12:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Welcome, {user_name}!"
+msgstr "Witaj, {user_name}!"
+
+msgid "Main menu"
+msgstr "Menu główne"
+
+msgid "Language selection"
+msgstr "Wybór języka"
+
+msgid "Please select your language:"
+msgstr "Proszę wybrać język:"
+
+msgid "Language has been changed to {language}."
+msgstr "Język został zmieniony na {language}."
+
+msgid "Joke"
+msgstr "Żart"
+
+msgid "Statistics"
+msgstr "Statystyka"
+
+msgid "Admin Panel"
+msgstr "Panel administratora"
+
+msgid "ℹ️ **Bot Information**\n\n**Bot Name:** {bot_name}\n**Version:** {bot_version}\n**Status:** ✅ Online\n**Features:** \n• Personalized Jokes API\n• User Statistics\n• Admin Panel\n• Interactive Menus\n\n**Developer:** {developer}\n**Created:** 2025"
+msgstr "ℹ️ **Informacje o bocie**\n\n**Nazwa bota:** {bot_name}\n**Wersja:** {bot_version}\n**Status:** ✅ Online\n**Funkcje:** \n• API do personalizowanych żartów\n• Statystyki użytkowników\n• Panel administratora\n• Interaktywne menu\n\n**Deweloper:** {developer}\n**Utworzono:** 2025"
+
+msgid "⚙️ Settings"
+msgstr "⚙️ Ustawienia"
+
+msgid "ℹ️ About"
+msgstr "ℹ️ O bocie"
+
+msgid "❓ Help"
+msgstr "❓ Pomoc"
+
+msgid "⚙️ **Settings**\n\n**Available Settings:**\n• Language: {language}\n• Notifications: Enabled\n• Privacy: Standard\n\n**Coming Soon:**\n• Custom themes\n• Advanced preferences\n• User profiles"
+msgstr "⚙️ **Ustawienia**\n\n**Dostępne ustawienia:**\n• Język: {language}\n• Powiadomienia: Włączone\n• Prywatność: Standardowa\n\n**Wkrótce:**\n• Własne motywy\n• Zaawansowane preferencje\n• Profile użytkowników"
+
+msgid "🔙 Back to Menu"
+msgstr "🔙 Wróć do menu"
+
+msgid "Change Language"
+msgstr "Zmień język"
+
+msgid "🆘 **Help & Commands**\n\n**Basic Commands:**\n/start - Start the bot and see welcome message\n/help - Show this help message\n/info - Get bot information\n/menu - Show interactive menu\n\n**Features:**\n• Interactive buttons and menus\n• Echo messages back to you\n• User-friendly interface\n• Error handling"
+msgstr "🆘 **Pomoc i polecenia**\n\n**Podstawowe polecenia:**\n/start - Uruchom bota i zobacz wiadomość powitalną\n/help - Pokaż tę wiadomość\n/info - Uzyskaj informacje o bocie\n/menu - Pokaż interaktywne menu\n\n**Funkcje:**\n• Interaktywne przyciski i menu\n• Odsyłanie twojej wiadomości\n• Przyjazny interfejs\n• Obsługa błędów"
+
+msgid "📝 You said: {user_message}"
+msgstr "📝 Powiedziałeś: {user_message}"
+
+msgid "🎭 Creating a joke for you..."
+msgstr "🎭 Tworzę dla Ciebie żart..."
+
+msgid "🎭 Fetching a joke for you..."
+msgstr "🎭 Pobieram dla Ciebie żart..."
+
+msgid "Tell me a joke"
+msgstr "Opowiedz mi dowcip"
+
+msgid "🤖 I'm a joke bot! Here's what I can do:\n\n• Send me any text and I'll create a personalized joke\n• Use /joke to get a random joke\n• Use /menu to see all available commands\n• Use /help for more information\n\nTry sending me something like \"Tell me a programming joke\" or \"I want a dad joke\"!"
+msgstr "🤖 Jestem botem do żartów! Oto co potrafię:\n\n• Wyślij mi dowolny tekst, a ja stworzę spersonalizowany żart\n• Użyj /joke, aby otrzymać losowy żart\n• Użyj /menu, aby zobaczyć wszystkie dostępne polecenia\n• Użyj /help, aby uzyskać więcej informacji\n\nSpróbuj wysłać mi coś w stylu \"Opowiedz mi żart o programistach\" lub \"Chcę żart tatusia\"!"
+
+msgid "🎭 Create Joke"
+msgstr "🎭 Stwórz żart"
+
+msgid "📋 Menu"
+msgstr "📋 Menu"
+
+msgid "🎭 Another Joke"
+msgstr "🎭 Inny żart"
+
+msgid "🤖 Welcome to {bot_name}, {user_name}!\n\nI'm your personal assistant bot with the following features:\n• 🎭 Personalized jokes based on your input\n• 📊 Bot statistics and analytics\n• 🎛️ Interactive menu system\n• ⚙️ Admin panel for administrators\n\nUse /help to see all available commands!"
+msgstr "🤖 Witaj w {bot_name}, {user_name}!\n\nJestem Twoim osobistym asystentem z następującymi funkcjami:\n• 🎭 Spersonalizowane żarty na podstawie Twojego wkładu\n• 📊 Statystyki i analityka bota\n• 🎛️ Interaktywny system menu\n• ⚙️ Panel administratora dla administratorów\n\nUżyj /help, aby zobaczyć wszystkie dostępne polecenia!"
+
+msgid "🆘 **Help & Commands**\n\n**Basic Commands:**\n/start - Start the bot and see welcome message\n/help - Show this help message\n/info - Get bot information\n/menu - Show interactive menu\n/joke - Get a random joke\n/stats - Show bot statistics\n/admin - Admin panel (admin only)\n\n**Features:**\n• Interactive buttons and menus\n• Personalized jokes from external API\n• User input processing\n• User-friendly interface\n• Error handling\n\n**How to use:**\n1. Use the buttons below for quick actions\n2. Send any text message to get a personalized joke\n3. Use /menu to access all features"
+msgstr "🆘 **Pomoc i polecenia**\n\n**Podstawowe polecenia:**\n/start - Uruchom bota i zobacz wiadomość powitalną\n/help - Pokaż tę wiadomość\n/info - Uzyskaj informacje o bocie\n/menu - Pokaż interaktywne menu\n/joke - Otrzymaj losowy żart\n/stats - Pokaż statystyki bota\n/admin - Panel administratora (tylko dla administratorów)\n\n**Funkcje:**\n• Interaktywne przyciski i menu\n• Spersonalizowane żarty z zewnętrznego API\n• Przetwarzanie danych wejściowych użytkownika\n• Przyjazny interfejs\n• Obsługa błędów\n\n**Jak używać:**\n1. Użyj przycisków poniżej, aby szybko wykonać akcje\n2. Wyślij dowolną wiadomość tekstową, aby otrzymać spersonalizowany żart\n3. Użyj /menu, aby uzyskać dostęp do wszystkich funkcji"
+
+msgid "😅 Sorry, something went wrong. Please try again!"
+msgstr "😅 Przepraszam, coś poszło nie tak. Proszę spróbować ponownie!"
+
+msgid "😅 Sorry, couldn't get statistics right now. Try again later!"
+msgstr "😅 Przepraszam, nie udało się teraz pobrać statystyk. Spróbuj ponownie później!"
+
+msgid "😅 Sorry, couldn't get admin data right now. Try again later!"
+msgstr "😅 Przepraszam, nie udało się teraz pobrać danych administratora. Spróbuj ponownie później!"
+
+msgid "😅 Sorry, I couldn't fetch a joke right now. Try again later!"
+msgstr "😅 Przepraszam, nie udało mi się teraz pobrać żartu. Spróbuj ponownie później!"
+
+msgid "❌ Access denied. This command is for administrators only."
+msgstr "❌ Dostęp zabroniony. To polecenie jest tylko dla administratorów."
+
+msgid "Statistics unavailable"
+msgstr "Statystyki niedostępne"
+
+msgid "Unknown"
+msgstr "Nieznany"
+
+msgid "d"
+msgstr "d"
+
+msgid "h"
+msgstr "g"
+
+msgid "m"
+msgstr "m"
+
+msgid "s"
+msgstr "s"
+
+msgid "📊 <b>Bot Statistics</b>"
+msgstr "📊 <b>Statystyki bota</b>"
+
+msgid "🕐 <b>Last Restart:</b>"
+msgstr "🕐 <b>Ostatni restart:</b>"
+
+msgid "⏱️ <b>Uptime:</b>"
+msgstr "⏱️ <b>Czas pracy:</b>"
+
+msgid "👥 <b>Users:</b>"
+msgstr "👥 <b>Użytkownicy:</b>"
+
+msgid "• Total:"
+msgstr "• Razem:"
+
+msgid "• Last 24h:"
+msgstr "• Ostatnie 24h:"
+
+msgid "📨 <b>Messages:</b>"
+msgstr "📨 <b>Wiadomości:</b>"
+
+msgid "• Commands:"
+msgstr "• Polecenia:"
+
+msgid "🔥 <b>Top Commands:</b>"
+msgstr "🔥 <b>Najlepsze polecenia:</b>"
+
+msgid "• No data"
+msgstr "• Brak danych"
+
+msgid "Users not found"
+msgstr "Nie znaleziono użytkowników"
+
+msgid "👥 <b>Users List:</b>"
+msgstr "👥 <b>Lista użytkowników:</b>"
+
+msgid "No username"
+msgstr "Brak nazwy użytkownika"
+
+msgid "ID:"
+msgstr "ID:"
+
+msgid "Last visit:"
+msgstr "Ostatnia wizyta:"
+
+msgid "Messages:"
+msgstr "Wiadomości:"
+
+msgid "... and {count} more users"
+msgstr "... i jeszcze {count} użytkowników"
+
+msgid "No name"
+msgstr "Brak imienia"
+
+msgid "🔄 Try Again"
+msgstr "🔄 Spróbuj ponownie"
+
+msgid "🔄 Refresh"
+msgstr "🔄 Odśwież"
+
+msgid "User"
+msgstr "Użytkownik"
+
+msgid "📞 **Contact**\n\n**Get in Touch:**\n• Developer: {developer}\n• Email: {email}\n• GitHub: {github}\n• Support: Available 24/7\n\n**Report Issues:**\n• Use /help for assistance\n• Send feedback via messages\n• Report bugs directly"
+msgstr "📞 **Kontakt**\n\n**Skontaktuj się:**\n• Deweloper: {developer}\n• Email: {email}\n• GitHub: {github}\n• Wsparcie: Dostępne 24/7\n\n**Zgłoś problemy:**\n• Użyj /help, aby uzyskać pomoc\n• Wyślij opinię w wiadomościach\n• Zgłaszaj błędy bezpośrednio"
+
+msgid "🎭 **Joke Generator**\n\nSend me any text and I'll create a personalized joke for you!\n\n**Examples:**\n• \"Tell me a programming joke\"\n• \"I want a dad joke\"\n• \"Make me laugh about cats\"\n• Or just send any text!\n\nI'll create a personalized joke for you! 😄"
+msgstr "🎭 **Generator żartów**\n\nWyślij mi dowolny tekst, a ja stworzę dla Ciebie spersonalizowany żart!\n\n**Przykłady:**\n• \"Opowiedz mi żart o programistach\"\n• \"Chcę żart tatusia\"\n• \"Rozśmiesz mnie żartem o kotach\"\n• Lub po prostu wyślij dowolny tekst!\n\nStworzę dla Ciebie spersonalizowany żart! 😄"
+
