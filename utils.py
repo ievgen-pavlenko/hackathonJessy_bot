@@ -17,10 +17,10 @@ def setup_logging(log_level: str = "INFO", log_format: str = None, docker_mode: 
     """Setup logging configuration"""
     if log_format is None:
         log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    
+
     # Configure handlers based on environment
     handlers = [logging.StreamHandler()]  # Always log to stdout/stderr
-    
+
     # Add file handler only if not in Docker or if explicitly requested
     if not docker_mode:
         try:
@@ -28,7 +28,7 @@ def setup_logging(log_level: str = "INFO", log_format: str = None, docker_mode: 
         except (PermissionError, OSError):
             # If can't write to file, just use stdout
             pass
-    
+
     logging.basicConfig(
         format=log_format,
         level=getattr(logging, log_level.upper()),
@@ -81,29 +81,34 @@ def get_user_mention(user) -> str:
     return f"[{user.first_name}](tg://user?id={user.id})"
 
 # Jokes API functions
-async def fetch_joke(user_input: str = "Розкажи анекдот") -> Optional[Dict[str, Any]]:
-    """Fetch a joke from your custom API using POST request with user input"""
+async def fetch_joke(user_input: str, lang: str) -> Optional[Dict[str, Any]]:
+    """Fetch a joke from your custom API using POST request with user input and language"""
     try:
+        logger.info(f"Fetching joke with user input: {user_input} and language: {lang}")
+        lang_map = {"uk": "Ukrainian", "en": "English", "pl": "Polish"}
+        api_lang = lang_map.get(lang, "Ukrainian")
+
         # Prepare request data according to API schema
         request_data = {
-            "input": user_input  # User input is passed to the API
+            "input": user_input,
+            "language": api_lang
         }
-        
+
         # Get full API URL with endpoint
         api_url = Config.get_jokes_api_url()
         if not api_url:
             logger.error("Jokes API URL is not configured")
             logger.error("Set JOKES_API_URL environment variable")
             return None
-        
+
         logger.info(f"Making request to: {api_url}")
         logger.info(f"Request data: {request_data}")
         logger.info(f"Headers: {Config.JOKES_API_HEADERS}")
-        
+
         # Use asyncio to run the blocking request in a thread pool
         loop = asyncio.get_event_loop()
         response = await loop.run_in_executor(
-            None, 
+            None,
             lambda: requests.post(
                 api_url,
                 json=request_data,
@@ -111,7 +116,7 @@ async def fetch_joke(user_input: str = "Розкажи анекдот") -> Optio
                 headers=Config.JOKES_API_HEADERS
             )
         )
-        
+
         if response.status_code == 200:
             joke_data = response.json()
             logger.info("Successfully fetched joke from custom API")
@@ -136,7 +141,7 @@ async def fetch_joke(user_input: str = "Розкажи анекдот") -> Optio
         else:
             logger.warning(f"Jokes API returned status {response.status_code}")
             return None
-            
+
     except requests.exceptions.Timeout:
         logger.error("Jokes API request timed out")
         return None
@@ -154,10 +159,10 @@ def format_joke(joke_data: Dict[str, Any]) -> str:
     """Format joke data from your custom API into a readable string"""
     if not joke_data:
         return "😅 Sorry, I couldn't fetch a joke right now. Try again later!"
-    
+
     # Extract joke text from API response according to schema
     joke_text = joke_data.get('response')
-    
+
     if joke_text:
         # Format the joke with emoji and markdown
         return f"🎭 **Анекдот**\n\n{joke_text}"
@@ -166,12 +171,12 @@ def format_joke(joke_data: Dict[str, Any]) -> str:
         for key in ['response', 'joke', 'text', 'content', 'message']:
             if joke_data.get(key):
                 return f"🎭 **Анекдот**\n\n{joke_data[key]}"
-        
+
         return "😅 Sorry, I couldn't fetch a joke right now. Try again later!"
 
-async def get_random_joke(user_input: str = "Розкажи анекдот") -> str:
+async def get_random_joke(user_input: str, lang: str) -> str:
     """Get a formatted joke based on user input"""
-    joke_data = await fetch_joke(user_input)
+    joke_data = await fetch_joke(user_input, lang)
     return format_joke(joke_data)
 
 def track_user_interaction(user_id: int, username: str = None, first_name: str = None, last_name: str = None):
