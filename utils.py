@@ -10,6 +10,7 @@ from config import Config
 from stats import stats_manager
 from base import UserInfo
 from constants import APIConstants, BotConstants
+from localization import translate
 
 logger = logging.getLogger(__name__)
 
@@ -155,7 +156,7 @@ async def fetch_joke(user_input: str, lang: str) -> Optional[Dict[str, Any]]:
         logger.error(f"Unexpected error fetching joke: {e}")
         return None
 
-def format_joke(joke_data: Dict[str, Any]) -> str:
+def format_joke(joke_data: Dict[str, Any], lang: str) -> str:
     """Format joke data from your custom API into a readable string"""
     if not joke_data:
         return "😅 Sorry, I couldn't fetch a joke right now. Try again later!"
@@ -165,19 +166,20 @@ def format_joke(joke_data: Dict[str, Any]) -> str:
 
     if joke_text:
         # Format the joke with emoji and markdown
-        return f"🎭 **Анекдот**\n\n{joke_text}"
+        return f'🎭 **{translate("Joke", lang)}**\n\n{joke_text}'
     else:
         # Fallback: try to display any text content
         for key in ['response', 'joke', 'text', 'content', 'message']:
             if joke_data.get(key):
-                return f"🎭 **Анекдот**\n\n{joke_data[key]}"
+                return f'🎭 **{translate("Joke", lang)}**\n\n{joke_data[key]}'
 
         return "😅 Sorry, I couldn't fetch a joke right now. Try again later!"
+
 
 async def get_random_joke(user_input: str, lang: str) -> str:
     """Get a formatted joke based on user input"""
     joke_data = await fetch_joke(user_input, lang)
-    return format_joke(joke_data)
+    return format_joke(joke_data, lang)
 
 def track_user_interaction(user_id: int, username: str = None, first_name: str = None, last_name: str = None):
     """Track user interaction for statistics (legacy method)"""
