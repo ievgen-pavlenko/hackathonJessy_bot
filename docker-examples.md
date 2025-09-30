@@ -51,73 +51,6 @@ EOF
 docker-compose up -d
 ```
 
-## 🔧 Розширені приклади
-
-### 1. З моніторингом
-
-```bash
-# Запуск з логуванням в файл
-docker run -d \
-  --name telegram-bot \
-  -e BOT_TOKEN="YOUR_BOT_TOKEN" \
-  -v $(pwd)/logs:/app/logs \
-  -e LOG_LEVEL=INFO \
-  telegram-bot
-```
-
-### 2. З базою даних
-
-```yaml
-# docker-compose.yml
-version: '3.8'
-services:
-  telegram-bot:
-    build: .
-    environment:
-      - BOT_TOKEN=${BOT_TOKEN}
-      - BOT_NAME=My Bot
-      - DATABASE_URL=postgresql://user:pass@db:5432/botdb
-    depends_on:
-      - db
-    restart: unless-stopped
-
-  db:
-    image: postgres:15-alpine
-    environment:
-      - POSTGRES_DB=botdb
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=pass
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-
-volumes:
-  postgres_data:
-```
-
-### 3. З Redis для кешування
-
-```yaml
-# docker-compose.yml
-version: '3.8'
-services:
-  telegram-bot:
-    build: .
-    environment:
-      - BOT_TOKEN=${BOT_TOKEN}
-    environment:
-      - BOT_NAME=My Bot
-      - REDIS_URL=redis://redis:6379
-    depends_on:
-      - redis
-    restart: unless-stopped
-
-  redis:
-    image: redis:7-alpine
-    restart: unless-stopped
-
-```
-
 ## 🐳 Docker Swarm
 
 ### 1. Ініціалізація кластера
@@ -158,19 +91,6 @@ docker service ps telegram-bot
 ```
 
 ## 🔍 Моніторинг та логування
-
-### 1. Перегляд логів
-
-```bash
-# Логи контейнера
-docker logs telegram-bot
-
-# Логи в реальному часі
-docker logs -f telegram-bot
-
-# Логи сервісу в Swarm
-docker service logs telegram-bot
-```
 
 ### 2. Централізоване логування
 
@@ -234,26 +154,6 @@ jobs:
 ```
 
 ## 🔧 Налагодження
-
-### 1. Вхід в контейнер
-
-```bash
-# Вхід в запущений контейнер
-docker exec -it telegram-bot bash
-
-# Запуск нового контейнера для налагодження
-docker run -it --rm telegram-bot bash
-```
-
-### 2. Перевірка змінних середовища
-
-```bash
-# Перевірка змінних
-docker exec telegram-bot env | grep BOT
-
-# Перевірка змінних середовища
-docker exec telegram-bot printenv BOT_TOKEN
-```
 
 ### 3. Тестування
 
