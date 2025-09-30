@@ -37,7 +37,7 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         # Check if user is waiting for joke input
         if state_manager.is_waiting_for_joke_input(user.id):
             # User is waiting for joke input - create joke
-            await handle_joke_creation(update, user_message)
+            await handle_joke_creation(update, user_message, context)
             # Clear user state after processing
             state_manager.clear_user_state(user.id)
         else:
@@ -83,21 +83,34 @@ async def handle_normal_echo(update: Update, user_message: str) -> None:
         parse_mode=ParseMode.MARKDOWN
     )
 
-async def handle_joke_creation(update: Update, user_message: str) -> None:
+async def handle_joke_creation(update: Update, user_message: str, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handle joke creation from user input"""
     user_id = update.message.from_user.id
     lang = stats_manager.get_user_language(user_id)
+
+    # Get the prompt message ID and delete it
+    prompt_message_id = state_manager.get_joke_prompt_message_id(user_id)
+    if prompt_message_id:
+        try:
+            await context.bot.delete_message(chat_id=update.message.chat_id, message_id=prompt_message_id)
+        except Exception as e:
+            logger.warning(f"Could not delete joke prompt message: {e}")
 
     # Send loading message
     loading_message = await update.message.reply_text(translate(TranslationKeys.CREATING_JOKE, lang))
     
     try:
+        # Save the last joke input
+        state_manager.set_last_joke_input(user_id, user_message)
+
         # Get joke based on user input
         joke_text = await get_random_joke(user_message, lang)
         
         # Update message with joke
         keyboard = [
-            [InlineKeyboardButton(translate(TranslationKeys.ANOTHER_JOKE, lang), callback_data='joke'), InlineKeyboardButton(translate(TranslationKeys.MENU, lang), callback_data='menu')]
+            [InlineKeyboardButton(translate(TranslationKeys.ANOTHER_JOKE, lang), callback_data='another_joke'),
+             InlineKeyboardButton(translate(TranslationKeys.TRY_AGAIN, lang), callback_data='retry_joke')],
+            [InlineKeyboardButton(translate(TranslationKeys.MENU, lang), callback_data='menu')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -111,7 +124,7 @@ async def handle_joke_creation(update: Update, user_message: str) -> None:
         logger.error(f"Error creating joke: {e}")
         error_message = "😅 Sorry, I couldn't create a joke right now. Try again later!"
         keyboard = [
-            [InlineKeyboardButton("🔄 Try Again", callback_data='joke'), InlineKeyboardButton("📋 Menu", callback_data='menu')]
+            [InlineKeyboardButton(translate(TranslationKeys.TRY_AGAIN, lang), callback_data='retry_joke'), InlineKeyboardButton(translate(TranslationKeys.MENU, lang), callback_data='menu')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         

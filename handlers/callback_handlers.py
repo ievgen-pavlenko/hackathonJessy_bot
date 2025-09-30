@@ -88,8 +88,111 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         await query.edit_message_text("🔄 Send me any message and I'll echo it back to you!")
     elif query.data == 'joke':
         await handle_joke_callback(update, context)
+    elif query.data == 'another_joke':
+        await handle_another_joke_callback(update, context)
+    elif query.data == 'retry_joke':
+        await handle_retry_joke_callback(update, context)
     elif query.data == 'admin':
         await handle_admin_callback(update, context)
+
+async def handle_retry_joke_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Handle retry joke button callback."""
+    query = update.callback_query
+    await query.answer()
+
+    user_id = query.from_user.id
+    lang = stats_manager.get_user_language(user_id)
+    last_joke_input = state_manager.get_last_joke_input(user_id)
+
+    if not last_joke_input:
+        await query.answer("Nothing to retry.", show_alert=True)
+        return
+
+    # Remove the keyboard from the original message
+    await query.edit_message_reply_markup(reply_markup=None)
+
+    # Send a new "loading" message
+    loading_message = await query.message.reply_text(translate(TranslationKeys.CREATING_JOKE, lang))
+
+    try:
+        joke_text = await get_random_joke(last_joke_input, lang)
+        
+        keyboard = [
+            [
+                InlineKeyboardButton(translate(TranslationKeys.ANOTHER_JOKE, lang), callback_data='another_joke'),
+                InlineKeyboardButton(translate(TranslationKeys.TRY_AGAIN, lang), callback_data='retry_joke')
+            ],
+            [InlineKeyboardButton(translate(TranslationKeys.MENU, lang), callback_data='menu')]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await loading_message.edit_text(
+            text=joke_text,
+            reply_markup=reply_markup,
+            parse_mode=ParseMode.MARKDOWN
+        )
+    except Exception as e:
+        logger.error(f"Error retrying joke: {e}")
+        error_message = "😅 Sorry, I couldn't create a joke right now. Try again later!"
+        keyboard = [
+            [
+                InlineKeyboardButton(translate(TranslationKeys.TRY_AGAIN, lang), callback_data='retry_joke'),
+                InlineKeyboardButton(translate(TranslationKeys.MENU, lang), callback_data='menu')
+            ]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await loading_message.edit_text(
+            text=error_message,
+            reply_markup=reply_markup
+        )
+
+async def handle_another_joke_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Handle 'Another Joke' button callback - ask user for input in a new message."""
+    query = update.callback_query
+    await query.answer()
+
+    try:
+        # Track user interaction
+        user = query.from_user
+        if user:
+            track_user_interaction(
+                user_id=user.id,
+                username=user.username,
+                first_name=user.first_name,
+                last_name=user.last_name
+            )
+            track_command_usage(user.id, 'another_joke_callback')
+
+            # Set user state to waiting for joke input
+            state_manager.set_user_state(user.id, UserState.WAITING_FOR_JOKE_INPUT)
+
+        lang = stats_manager.get_user_language(user.id)
+        # Ask user for joke input
+        joke_prompt = translate(TranslationKeys.JOKE_GENERATOR_PROMPT, lang)
+
+        keyboard = [
+            [InlineKeyboardButton(translate(TranslationKeys.BACK_TO_MENU, lang), callback_data='menu')]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+
+        # Send a new message with the prompt
+        prompt_message = await query.message.reply_text(
+            joke_prompt,
+            reply_markup=reply_markup,
+            parse_mode=ParseMode.MARKDOWN
+        )
+
+        # And now, remove the keyboard from the original message
+        await query.edit_message_reply_markup(reply_markup=None)
+
+        # Set user state to waiting for joke input
+        state_manager.set_user_state(user.id, UserState.WAITING_FOR_JOKE_INPUT, prompt_message.message_id)
+
+    except Exception as e:
+        logger.error(f"Error in another_joke_callback: {e}")
+        lang = stats_manager.get_user_language(query.from_user.id)
+        error_text = translate(TranslationKeys.ERROR_JOKE, lang)
+        await query.message.reply_text(error_text)
 
 async def handle_info_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handle info button callback."""
@@ -208,10 +311,8 @@ async def handle_joke_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                 first_name=user.first_name,
                 last_name=user.last_name
             )
-            track_command_usage(user.id, 'joke_callback')
-
             # Set user state to waiting for joke input
-            state_manager.set_user_state(user.id, UserState.WAITING_FOR_JOKE_INPUT)
+            state_manager.set_user_state(user.id, UserState.WAITING_FOR_JOKE_INPUT, query.message.message_id)
 
         lang = stats_manager.get_user_language(user.id)
         # Ask user for joke input
