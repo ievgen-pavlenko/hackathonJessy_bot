@@ -104,7 +104,8 @@ async def fetch_joke(user_input: str, lang: str) -> Optional[Dict[str, Any]]:
 
         logger.info(f"Making request to: {api_url}")
         logger.info(f"Request data: {request_data}")
-        logger.info(f"Headers: {Config.JOKES_API_HEADERS}")
+        headers = Config.get_jokes_api_headers()
+        logger.debug(f"Headers: {headers}")
 
         # Use asyncio to run the blocking request in a thread pool
         loop = asyncio.get_event_loop()
@@ -114,7 +115,7 @@ async def fetch_joke(user_input: str, lang: str) -> Optional[Dict[str, Any]]:
                 api_url,
                 json=request_data,
                 timeout=Config.JOKES_API_TIMEOUT,
-                headers=Config.JOKES_API_HEADERS
+                headers=headers
             )
         )
 

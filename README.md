@@ -161,14 +161,20 @@ docker service create \
 
 ## 🎭 Joke API
 
-### Налаштування зовнішнього API
+### Jokes API
 
-```bash
-# В config.env або як змінна середовища
-JOKES_API_URL=http://joke-api:8080
-JOKES_API_KEY=your_api_key_here  # опціонально
-JOKES_API_TIMEOUT=15             # опціонально
-```
+*   `JOKES_API_URL` - The base URL of the jokes API.
+*   `JOKES_API_KEY` - (Optional) The API key for the jokes API.
+*   `JOKES_API_TIMEOUT` - (Optional) The timeout for the jokes API in seconds. Default: `5`.
+*   `JOKES_API_ENDPOINT` - (Optional) The endpoint for the jokes API. Default: `/api/getJoke`.
+
+### Entra ID for Jokes API
+
+*   `USE_ENTRA_ID_FOR_JOKES_API` - Set to `true` to use Entra ID for authentication with the Jokes API. Default: `false`.
+*   `ENTRA_ID_TENANT_ID` - The tenant ID for your Azure application.
+*   `ENTRA_ID_CLIENT_ID` - The client ID for your Azure application.
+*   `ENTRA_ID_CLIENT_SECRET` - The client secret for your Azure application.
+*   `ENTRA_ID_SCOPE` - The scope for the API you are calling (e.g., `api://your-api-client-id/.default`).
 
 ### Підтримувані формати API
 

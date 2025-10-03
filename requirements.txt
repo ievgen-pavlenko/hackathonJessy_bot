@@ -3,6 +3,7 @@ python-telegram-bot>=21.0.0
 python-dotenv==1.0.0
 requests==2.31.0
 polib==1.1.1
+msal==1.24.1
 
 # Optional dependencies for future features
 # sqlalchemy==2.0.23
